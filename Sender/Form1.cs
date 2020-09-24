@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,48 +49,55 @@ namespace Sender
             publisherSocket.Connect(Settings.Broker_Ip, Settings.Broker_Port);
             if (publisherSocket.isConnected)
             {
-            using (WebClient client = new WebClient())
-            {
-                var json = client.DownloadString(API_URL);
-                Console.WriteLine($"Sent {json}\n\n");
-                CovidData obj1 = JsonConvert.DeserializeObject<CovidData>(json);
-                foreach (Country cs in obj1.Countries)
+                try
                 {
-                    if (cs.country.Equals(comboBox1.Text))
+                    using (WebClient client = new WebClient())
                     {
-
-                        if (checkBox1.Checked == true)
-                            str1 = cs.NewConfirmed.ToString();
-                        if (checkBox2.Checked == true)
-                            str2 = cs.NewDeaths.ToString();
-                        if (checkBox3.Checked == true)
-                            str3 = cs.NewRecovered.ToString();
-                        if (checkBox4.Checked == true)
-                            str4 = cs.TotalConfirmed.ToString();
-                        if (checkBox5.Checked == true)
-                            str5 = cs.TotalDeaths.ToString();
-                        if (checkBox6.Checked == true)
-                            str6 = cs.TotalRecovered.ToString();
-                            for (int i = 1; i < 7; i++)
+                        var json = client.DownloadString(API_URL);
+                        Console.WriteLine($"Sent {json}\n\n");
+                        CovidData obj1 = JsonConvert.DeserializeObject<CovidData>(json);
+                        foreach (Country cs in obj1.Countries)
+                        {
+                            if (cs.country.Equals(comboBox1.Text))
                             {
-                                if (i == 1)
-                                    if (!str1.Equals("")) countryinfo += $"New Cases confirmed: {str1}\n";
-                                if (i == 2)
-                                    if (!str2.Equals("")) countryinfo += $"New Deaths confirmed: {str2}\n";
-                                if (i == 3)
-                                    if (!str3.Equals("")) countryinfo += $"New Recovered cases: {str3}\n";
-                                if (i == 4)
-                                    if (!str4.Equals("")) countryinfo += $"Total Cases Confirmed: {str4}\n";
-                                if (i == 5)
-                                    if (!str5.Equals("")) countryinfo += $"Total Deaths: {str5}\n";
-                                if (i == 6)
-                                    if (!str6.Equals("")) countryinfo += $"Total Recovered: {str6}\n\n";
+
+                                if (checkBox1.Checked == true)
+                                    str1 = cs.NewConfirmed.ToString();
+                                if (checkBox2.Checked == true)
+                                    str2 = cs.NewDeaths.ToString();
+                                if (checkBox3.Checked == true)
+                                    str3 = cs.NewRecovered.ToString();
+                                if (checkBox4.Checked == true)
+                                    str4 = cs.TotalConfirmed.ToString();
+                                if (checkBox5.Checked == true)
+                                    str5 = cs.TotalDeaths.ToString();
+                                if (checkBox6.Checked == true)
+                                    str6 = cs.TotalRecovered.ToString();
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (i == 1)
+                                        if (!str1.Equals("")) countryinfo += $"New Cases confirmed: {str1}\n";
+                                    if (i == 2)
+                                        if (!str2.Equals("")) countryinfo += $"New Deaths confirmed: {str2}\n";
+                                    if (i == 3)
+                                        if (!str3.Equals("")) countryinfo += $"New Recovered cases: {str3}\n";
+                                    if (i == 4)
+                                        if (!str4.Equals("")) countryinfo += $"Total Cases Confirmed: {str4}\n";
+                                    if (i == 5)
+                                        if (!str5.Equals("")) countryinfo += $"Total Deaths: {str5}\n";
+                                    if (i == 6)
+                                        if (!str6.Equals("")) countryinfo += $"Total Recovered: {str6}\n\n";
+
+                                }
 
                             }
-
+                        }
                     }
-                } 
-            }
+                }
+                catch
+                {
+                    MessageBox.Show("No Internet Connection. Please connect to internet and try again !");
+                }
 
 
                 var payload = new Payload();
